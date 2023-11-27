@@ -46,7 +46,7 @@ public class UserController {
 		return ResponseEntity.status(HttpStatus.FOUND).body(serv.getUserById(id));
 		
 	}
-	
+	// Along with the @CircuitBreaker, kindly check the @Retry and @RateLimiter functionality also
 	@GetMapping(path = "/getAllUsers")
 	@CircuitBreaker(name = "User_To_Rating_Service_Call",fallbackMethod = "userToRatingFallbackMethodCall")
 	public ResponseEntity<List<User>> getAllUsers() throws RestClientException, URISyntaxException{		
