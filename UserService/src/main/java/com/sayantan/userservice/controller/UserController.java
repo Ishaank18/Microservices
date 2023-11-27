@@ -54,7 +54,7 @@ public class UserController {
 	}
 
 	// creating the fallback method for the circuit breaker
-	//Condition for implementing circuit-breaker --> 1. in the fallback method, exception argument is mandatory and the arguments which are present in the main method from where the fallback method is called. 2. the re
+	//Condition for implementing circuit-breaker --> 1. in the fallback method, exception argument is mandatory and the arguments which are present in the main method from where the fallback method is called. 2. the
 	// return type of the main method and the fallback method should be same
 	public ResponseEntity<List<User>> userToRatingFallbackMethodCall(Exception ex) {	
 		log.info("the fallback method is called due to the exception: {}",ex.getMessage());
