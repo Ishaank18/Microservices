@@ -2,6 +2,7 @@ package com.sayantan.userservice.controller;
 
 
 import java.net.URISyntaxException;
+import java.util.Collections;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -19,6 +20,8 @@ import org.springframework.web.client.RestClientException;
 
 import com.sayantan.userservice.pojo.User;
 import com.sayantan.userservice.service.UserServ;
+
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 
 @RestController
 @RequestMapping("/user")
@@ -45,10 +48,15 @@ public class UserController {
 	}
 	
 	@GetMapping(path = "/getAllUsers")
-	public ResponseEntity<List<User>> getAllUsers() throws RestClientException, URISyntaxException{
-		
-		return ResponseEntity.status(HttpStatus.FOUND).body(serv.getAllUsers());
-		
+	@CircuitBreaker(name = "User_To_Rating_Service_Call",fallbackMethod = "userToRatingFallbackMethodCall")
+	public ResponseEntity<List<User>> getAllUsers() throws RestClientException, URISyntaxException{		
+		return ResponseEntity.status(HttpStatus.FOUND).body(serv.getAllUsers());		
 	}
 
+	// creating the fallback method for the circuit breaker
+	
+	public ResponseEntity<List<User>> userToRatingFallbackMethodCall(Exception ex) {	
+		log.info("the fallback method is called due to the exception: {}",ex.getMessage());
+		return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(Collections.emptyList());		
+	}
 }
