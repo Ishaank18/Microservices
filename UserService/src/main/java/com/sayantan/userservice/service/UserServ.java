@@ -15,6 +15,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.sayantan.userservice.exception.UserNotFoundException;
 import com.sayantan.userservice.pojo.User;
+import com.sayantan.userservice.repo.UserRepo;
 
 @Service
 public class UserServ {
@@ -22,29 +23,32 @@ public class UserServ {
 	@Autowired
 	private RestTemplate restTemplate;
 	
+	@Autowired
+	private UserRepo usrRepo;
+	
 	Logger log = LoggerFactory.getLogger(UserServ.class);
 	
 	
 	public User saveUser(User user) {
-		return user;
+		return usrRepo.save(user);
 	}
 
 
 	public List<User> getAllUsers() throws RestClientException, URISyntaxException {
 		ResponseEntity<List> ratingResponse = restTemplate.getForEntity(new URI("http://RATINGMICROSERVICE/rating/getAllRatings"), List.class);
 		log.info("Rating servic response: {}",ratingResponse.getBody());
-		User  us1 = new User("1", "Sanu", "sanu@gmail.com", "Hard-Working");
-		User  us2 = new User("2", "Kdc", "kdc@gmail.com", "good");
-		User  us3 = new User("3", "Chiru", "chiru@gmail.com", "patience");
-		User  us4 = new User("4", "Sonai", "sonai@gmail.com", "smart");
+		User  us1 = new User(1, "Sanu", "sanu@gmail.com", "Hard-Working");
+		User  us2 = new User(2, "Kdc", "kdc@gmail.com", "good");
+		User  us3 = new User(3, "Chiru", "chiru@gmail.com", "patience");
+		User  us4 = new User(4, "Sonai", "sonai@gmail.com", "smart");
 		return  Arrays.asList(us1,us2,us3,us4);
 	}
 
 	public User getUserById(String id) {
-		User  us1 = new User("1", "Sanu", "sanu@gmail.com", "Hard-Working");
-		User  us2 = new User("2", "Kdc", "kdc@gmail.com", "good");
-		User  us3 = new User("3", "Chiru", "chiru@gmail.com", "patience");
-		User  us4 = new User("4", "Sonai", "sonai@gmail.com", "smart");
+		User  us1 = new User(1, "Sanu", "sanu@gmail.com", "Hard-Working");
+		User  us2 = new User(2, "Kdc", "kdc@gmail.com", "good");
+		User  us3 = new User(3, "Chiru", "chiru@gmail.com", "patience");
+		User  us4 = new User(4, "Sonai", "sonai@gmail.com", "smart");
 		if(id.equals("1")) {
 			return us1;
 		}
